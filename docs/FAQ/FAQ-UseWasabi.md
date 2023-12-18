@@ -520,6 +520,27 @@ So when you have Wasabi running, you will be notified about an incoming receivin
 But when Wasabi is offline, it does not listen to the network and it will not know about your unconfirmed transaction when you next launch Wasabi.
 In this case you have to wait until your transaction is confirmed in a block, and based on the [BIP 158 block filters](https://github.com/bitcoin/bips/blob/master/bip-0158.mediawiki), Wasabi will download that whole block including your transaction from a random P2P node.
 
+:::tip Dollar amounts are approximately
+If you suspect that a transaction belonging to your wallet was missed because Wasabi was not running at the time of broadcast, you can use the [Broadcaster](...) to make the transaction appear in the client.
+:::
+
+### What can I do if my wallet is missing money?
+
+There are several cases that can lead to the wallet to display an incorrect balance:
+
+If your history list is empty, you probably used the wrong passphrase: 
+If wallet was created in Wasabi, or with a passphrase, you must use the same password when recovering it, as it will be used as a passphrase. If your wallet was created with another software, or without passphrase, you must leave the password blank.
+
+If you are missing some mempool transactions:
+Wasabi only displays transaction that reached the mempool when the client was running, see [dedicated section](?). If one of your transaction is missing and you want the client to display it, you can use the [Broadcaster](?)
+
+If you are missing some confirmed transactions:
+Please follow the [resync procedure](?). If it doesn't work, please contact the [Support](?).
+
+If you have transactions you didn't initiate:
+In the vast majority of cases, this is related to usage of a phishing software, non official Wasabi client, that unfortunately resulted in the of your funds. Please first simply check your browser history to see where you downloaded the software you're using, then if you have more doubts [verify the PGP keys](?). If you find out that you are using the official client, please contract the [Support](?).
+
+- 
 ## Send
 
 ### How do I set a destination address?
