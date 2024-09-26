@@ -1,0 +1,47 @@
+name: Update WasabiDoc Version
+
+on:
+  repository_dispatch:
+    types: [update-version]
+
+jobs:
+  update-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Update config.ts
+        run: |
+          NEW_VERSION="${{ github.event.client_payload.new_version }}"
+          echo "Updating to version: $NEW_VERSION"
+          sed -i "s/currentVersion: '[^']*'/currentVersion: '$NEW_VERSION'/" docs/.vuepress/config.ts
+
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout -b update-version-branch
+          git add docs/.vuepress/config.ts
+          git commit -m "Update version to ${{ github.event.client_payload.new_version }}"
+          git push --set-upstream origin update-version-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh
+
+      - name: Create Pull Request
+        run: |
+          gh auth login --with-token <<< "${{ secrets.PAT_WITH_PUSH_ACCESS }}"
+          gh pr create --base master --head update-version-branch --title "Update version to ${{ github.event.client_payload.new_version }}" --body "Auto-update version to ${{ github.event.client_payload.new_version }}."
+        env:
+          GITHUB_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+
+      - name: Merge Pull Request
+        run: |
+          gh pr merge --auto --squash --delete-branch --repo ${{ github.repository }} --head update-version-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
