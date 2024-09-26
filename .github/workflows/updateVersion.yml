@@ -27,7 +27,7 @@ jobs:
           git commit -m "Update version to ${{ github.event.client_payload.new_version }}"
           git push -f --set-upstream origin update-version-branch
         env:
-          GITHUB_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install GitHub CLI
         run: sudo apt-get install gh
@@ -36,10 +36,10 @@ jobs:
         run: |
           gh pr create --base master --head update-version-branch --title "Update version to ${{ github.event.client_payload.new_version }}" --body "Auto-update version to ${{ github.event.client_payload.new_version }}."
         env:
-          GH_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge Pull Request
         run: |
           gh pr merge --auto --squash --delete-branch --repo ${{ github.repository }} --head update-version-branch
         env:
-          GH_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
