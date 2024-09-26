@@ -38,9 +38,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge Pull Request
+      - name: Merge Pull Request with Admin Privileges
         run: |
-          gh pr merge update-version-branch --auto --squash --delete-branch
+          gh pr merge update-version-branch --admin --squash --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
