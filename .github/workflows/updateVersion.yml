@@ -35,13 +35,12 @@ jobs:
 
       - name: Create Pull Request
         run: |
-          gh auth login --with-token <<< "${{ secrets.PAT_WITH_PUSH_ACCESS }}"
           gh pr create --base master --head update-version-branch --title "Update version to ${{ github.event.client_payload.new_version }}" --body "Auto-update version to ${{ github.event.client_payload.new_version }}."
         env:
-          GITHUB_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+          GH_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
 
       - name: Merge Pull Request
         run: |
           gh pr merge --auto --squash --delete-branch --repo ${{ github.repository }} --head update-version-branch
         env:
-          GITHUB_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
+          GH_TOKEN: ${{ secrets.WASABI_DOC_UPDATE }}
