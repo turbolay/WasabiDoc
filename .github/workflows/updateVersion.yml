@@ -40,6 +40,6 @@ jobs:
 
       - name: Merge Pull Request
         run: |
-          gh pr merge --auto --squash --delete-branch --repo ${{ github.repository }} --head update-version-branch
+          gh pr merge update-version-branch --auto --squash --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
