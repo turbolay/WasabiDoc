@@ -21,7 +21,7 @@ jobs:
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.name "GitHub Action"
           git checkout -b update-version-branch
           git add docs/.vuepress/config.ts
           git commit -m "Update version to ${{ github.event.client_payload.new_version }}"
