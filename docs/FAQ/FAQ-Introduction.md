@@ -138,6 +138,14 @@ It would also be noticeable to all users except the targeted user, as their coin
 It has been argued that this 'attack' would be very costly in terms of fees, as the number of coins being mixed is verifiable, and they always pay mining fees.
 See [here](https://github.com/WalletWasabi/WabiSabi/blob/master/protocol.md#attacks-on-privacy) for more info.
 
+---
+
+_Additional potential metadata leak_:
+Although registered coins cannot be linked to each other by themselves (they are unique Alices), there can be a a metadata leak if the client is coinjoining and has registered multiple coins and then suddenly disconnects.
+Since this will de-register the coins and the coordinator may assume that the de-registered coins belong to the same owner.
+
+**This is not an attack that the coordinator can do by itself, this is only the case if the client disconnects while having multiple coins registered.**
+
 ### What is the history of Wasabi?
 
 Ádám Ficsor worked with several others on a privacy-focused Bitcoin wallet called Hidden Wallet all the way [back in December 2015](https://docs.google.com/drawings/d/1wLL7aSgYBWNoyzllg6_haisFt-gQCf-QUzVzQPkARts/edit).
