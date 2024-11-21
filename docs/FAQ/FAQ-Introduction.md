@@ -101,19 +101,41 @@ Also, remember to follow our [blog](https://blog.wasabiwallet.io) to get the lat
 
 ### Can the coordinator attack me?
 
-The developers have gone to great lengths to ensure that the coordinator cannot steal funds nor link inputs to outputs. 
-The nature of Wasabi is that you should not need to trust the developers or the Wasabi coordinating server, as you can verify that the code does not leak information to anyone.
-Due to the nature of coinjoin transactions users don't need to trust other users or the coordinator against theft, leaving denial of service and attacks on privacy as the main concerns
+Wasabi is designed with a zero trust policy.
+This also applies to the coordinator: it doesn't need to be trusted as it cannot steal funds or link inputs to outputs.
+All computation, including decomposition, is done on the client side.
+So all the coordinator has to do is coordinate the coinjoin (PSBT transaction) between the participants.
 
-The only known possible 'malicious' actions that the server *could* perform are two sides of the same coin;
-- **Blacklisted UTXO's**:
-Though this would not affect the users who are able to successfully mix with other 'honest/real' peers.
+However, there are a few things to be taken into account:
+
+- **Mining fee rate**:
+The coordinator decides the mining fee rate of the coinjoin transaction.
+So it can set a high mining fee rate, either maliciously or due to the mining fee market and the coordinator's policy (confirmation target).
+In the case of a malicious coordinator this makes users overpay on mining fees and thus "waste money".
+In the case of a high mining fee market and/or fee spikes, users may not be willing to pay that much in fees.
+
+To prevent against this the client has a [maximum mining fee rate it is willing to pay](https://docs.wasabiwallet.io/glossary/Glossary-PrivacyWasabi.html#max-coinjoin-mining-fee-rate), in case it is above this value the client will not participate in the coinjoin.
+
+- **Small rounds**:
+The coordinator could create small rounds, either intentionally or due to low liquidity.
+This makes users pay mining fees for little to no privacy gain.
+Additionally creating small rounds makes a targeted sybil attack easier, read more about this below at _Targeted Sybil Attack_.
+
+To prevent against this the client has a [minimum amount of inputs it accepts](https://docs.wasabiwallet.io/glossary/Glossary-PrivacyWasabi.html#absolute-min-input-count), in case it is below this value the client will not participate in the coinjoin.
+
+_More general coinjoin concerns:_
+
+- **Denial of Service**:
+
+The coordinator server needs to be functional to create the coinjoin transaction.
+
+The coordinator could refuse/blacklist certain UTXO's, so they won't be able to participate.
+
 - **Targeted Sybil Attack**:
-The follow-up concern is the inverse of the above.
-It is possible that the server could *only* include one 'honest/real' coin in the mix and supply the other coins themselves.
+It is possible that the server could *only* include one 'honest/real' coin in the mix and supply the other coins itself.
 This gives a false sense of security, **but does not worsen the existing privacy of the coin**.
-It would also be noticeable to all users excluding the user being targeted as their coins would not be mixed.
-It has been argued that this 'attack' would be very costly in terms of fees because the number of coins being mixed is verifiable, and they always pay mining fees.
+It would also be noticeable to all users except the targeted user, as their coins would not be mixed.
+It has been argued that this 'attack' would be very costly in terms of fees, as the number of coins being mixed is verifiable, and they always pay mining fees.
 See [here](https://github.com/WalletWasabi/WabiSabi/blob/master/protocol.md#attacks-on-privacy) for more info.
 
 ### What is the history of Wasabi?
